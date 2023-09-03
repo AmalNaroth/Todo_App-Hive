@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_hive/view/editing_screen.dart';
 import 'package:todo_hive/view/home_screen.dart';
 import 'package:todo_hive/view/splash_screen.dart';
 import 'package:todo_hive/viewmodels/splash_provider.dart';
@@ -21,9 +22,13 @@ class MyApp extends StatelessWidget {
         title: "Todo-Hive",
         initialRoute: '/splash',
         debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.grey
+        ),
         routes: {
-          '/home' : (context)=>const HomeScreen(),
-          '/splash' : (context)=> const SplashScreen()
+          '/home' : (context)=> HomeScreen(),
+          '/splash' : (context)=> const SplashScreen(),
+          '/editScreen' : (context)=>  EditScreen(),
         },
       ),
     );
