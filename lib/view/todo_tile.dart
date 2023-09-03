@@ -12,15 +12,17 @@ class TodoTile extends StatelessWidget {
   final bool taskCompleted;
   Function(bool?)? onChanged;
   DateTime taskDateAndTime;
+  Function deleteFunction;
   TodoTile(
       {super.key,
       required this.taskTitle,
       required this.taskDescripction,
       required this.taskCompleted,
       required this.onChanged,
-      required this.taskDateAndTime});
+      required this.taskDateAndTime,
+      required this.deleteFunction});
 
-      String formattedDate = DateFormat.yMMMd().format(DateTime.now());
+  String formattedDate = DateFormat.yMMMd().format(DateTime.now());
 
   getRadomColors() {
     return colosList[random.nextInt(colosList.length)];
@@ -46,8 +48,10 @@ class TodoTile extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             text: TextSpan(
               text: "$taskTitle\n",
-              style:  TextStyle(
-                decoration: taskCompleted ? TextDecoration.lineThrough : TextDecoration.none,
+              style: TextStyle(
+                decoration: taskCompleted
+                    ? TextDecoration.lineThrough
+                    : TextDecoration.none,
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
@@ -81,7 +85,7 @@ class TodoTile extends StatelessWidget {
               .leading, // To place the checkbox on the left side
           secondary: IconButton(
             onPressed: () {
-              // confirmDialog(context);
+              deleteFunction();
             },
             icon: const Icon(
               Icons.delete,

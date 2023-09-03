@@ -25,13 +25,17 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       todoList[index][1] = !todoList[index][1];
     });
+    
   }
 
   void saveNewTask() {
     setState(() {
       todoList.add([titleController.text, false]);
     });
+    print("created");
     Navigator.of(context).pop();
+    titleController.clear();
+    contentController.clear();
   }
 
   void createNewTask() {
@@ -42,6 +46,13 @@ class _HomeScreenState extends State<HomeScreen> {
               onSave: saveNewTask,
               onCancel: () => Navigator.of(context).pop(),
             )));
+  }
+
+  void deleteTask(int index){
+    setState(() {
+      todoList.removeAt(index);
+    });
+    print("hbugb");
   }
 
   @override
@@ -94,6 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       taskTitle: todoList[index][0],
                       taskDescripction: "Task need to complete",
                       taskDateAndTime: DateTime.now(),
+                      deleteFunction: () => deleteTask(index),
                     );
                   },
                 ),
