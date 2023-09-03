@@ -5,6 +5,7 @@ import 'package:todo_hive/models/todo_model.dart';
 import 'package:todo_hive/view/editing_screen.dart';
 import 'package:todo_hive/view/home_screen.dart';
 import 'package:todo_hive/view/splash_screen.dart';
+import 'package:todo_hive/viewmodels/home_provder.dart';
 import 'package:todo_hive/viewmodels/splash_provider.dart';
 
 Future<void> main() async{
@@ -24,13 +25,16 @@ class MyApp extends StatelessWidget {
     return  MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => SplashProvider(),),
+        ChangeNotifierProvider(create: (context) => HomeScreenProvider(),),
       ],
       child: MaterialApp(
         title: "Todo-Hive",
         initialRoute: '/splash',
         debugShowCheckedModeBanner: false,
+        //darkTheme: ThemeData.dark(),
         theme: ThemeData(
-          primarySwatch: Colors.grey
+          primarySwatch: Colors.grey,
+          
         ),
         routes: {
           '/home' : (context)=> HomeScreen(),

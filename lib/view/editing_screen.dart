@@ -7,15 +7,15 @@ class EditScreen extends StatelessWidget {
   VoidCallback? onCancel;
   EditScreen(
       {super.key,
-       this.titleController,
-       this.contentController,
-       this.onSave,
-       this.onCancel});
+      this.titleController,
+      this.contentController,
+      this.onSave,
+      this.onCancel});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade900,
+      backgroundColor: Colors.grey.shade200,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16, 40, 16, 0),
         child: Column(children: [
@@ -23,7 +23,7 @@ class EditScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                  onPressed:onCancel,
+                  onPressed: onCancel,
                   padding: const EdgeInsets.all(0),
                   icon: Container(
                     width: 40,
@@ -43,16 +43,19 @@ class EditScreen extends StatelessWidget {
             children: [
               TextField(
                 controller: titleController,
-                style: const TextStyle(color: Colors.white, fontSize: 30),
+                style: const TextStyle(color: Colors.black, fontSize: 30),
                 decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Title',
                     hintStyle: TextStyle(color: Colors.grey, fontSize: 30)),
               ),
+              Divider(
+                thickness: 3,
+              ),
               TextField(
                 controller: contentController,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
                 maxLines: 10,
                 decoration: const InputDecoration(
@@ -67,10 +70,10 @@ class EditScreen extends StatelessWidget {
         ]),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed:onSave,
+        onPressed: onSave,
         elevation: 10,
         backgroundColor: Colors.grey.shade800,
-        child: const Icon(Icons.save),
+        child: const Icon(Icons.done_all_outlined,color: Colors.white,),
       ),
     );
   }
