@@ -2,25 +2,20 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:todo_hive/models/todo_model.dart';
 import 'package:todo_hive/utils/constant.dart';
 
 Random random = Random();
 
 class TodoTile extends StatelessWidget {
-  final String taskTitle;
-  final String taskDescripction;
-  final bool taskCompleted;
   Function(bool?)? onChanged;
-  DateTime taskDateAndTime;
   Function deleteFunction;
+  TodoModel todomodelitsms;
   TodoTile(
       {super.key,
-      required this.taskTitle,
-      required this.taskDescripction,
-      required this.taskCompleted,
       required this.onChanged,
-      required this.taskDateAndTime,
-      required this.deleteFunction});
+      required this.deleteFunction,
+      required this.todomodelitsms});
 
   String formattedDate = DateFormat.yMMMd().format(DateTime.now());
 
@@ -32,7 +27,7 @@ class TodoTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.only(bottom: 15),
-      color: getRadomColors(),
+      //color: getRadomColors(),
       elevation: 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -41,15 +36,14 @@ class TodoTile extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: CheckboxListTile(
           activeColor: Colors.black,
-          value: taskCompleted,
+          value: todomodelitsms.checkBox,
           onChanged: onChanged,
           title: RichText(
-            maxLines: 3,
             overflow: TextOverflow.ellipsis,
             text: TextSpan(
-              text: "$taskTitle\n",
+              text: "${todomodelitsms.taskTitle}\n",
               style: TextStyle(
-                decoration: taskCompleted
+                decoration: todomodelitsms.checkBox
                     ? TextDecoration.lineThrough
                     : TextDecoration.none,
                 color: Colors.black,
@@ -59,7 +53,7 @@ class TodoTile extends StatelessWidget {
               ),
               children: [
                 TextSpan(
-                  text: taskDescripction,
+                  text: "${todomodelitsms.taskDescipction}",
                   style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.normal,
@@ -73,7 +67,7 @@ class TodoTile extends StatelessWidget {
           subtitle: Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
-              'Edited: $formattedDate',
+              'Edited: ${todomodelitsms.taskTime}',
               style: TextStyle(
                 fontSize: 10,
                 fontStyle: FontStyle.italic,

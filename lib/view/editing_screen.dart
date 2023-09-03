@@ -54,7 +54,7 @@ class EditScreen extends StatelessWidget {
                 style: const TextStyle(
                   color: Colors.white,
                 ),
-                maxLines: null,
+                maxLines: 10,
                 decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Type something here',

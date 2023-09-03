@@ -1,62 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:todo_hive/components/custom_text_widget.dart';
+import 'package:todo_hive/models/todo_model.dart';
+import 'package:todo_hive/repo/database.dart';
 import 'package:todo_hive/utils/constant.dart';
 import 'package:todo_hive/view/editing_screen.dart';
 import 'package:todo_hive/view/todo_tile.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController titleController = TextEditingController();
+
   final TextEditingController contentController = TextEditingController();
 
-  List todoList = [
-    ["Make tutorail", false],
-    ['Do exresice', false],
-  ];
-
-  void checkBocChnage(bool? value, int index) {
-    setState(() {
-      todoList[index][1] = !todoList[index][1];
-    });
-    
+  void checkBoxChange(TodoModel value) {
+    value.checkBox = !value.checkBox;
+    final updateValue = TodoModel(
+        taskTitle: value.taskTitle,
+        taskDescipction: value.taskDescipction,
+        taskTime: value.taskTime,
+        checkBox: value.checkBox);
+    checkboxUpdate(value);
   }
 
-  void saveNewTask() {
-    setState(() {
-      todoList.add([titleController.text, false]);
-    });
+  void saveNewTask(BuildContext context) {
+    String formattedDate = DateFormat.yMMMd().format(DateTime.now());
+    final todomodelvalue = TodoModel(
+        taskTitle: titleController.text,
+        taskDescipction: contentController.text,
+        taskTime: formattedDate,
+        checkBox: false);
+    addToDataBase(todomodelvalue);
     print("created");
     Navigator.of(context).pop();
     titleController.clear();
     contentController.clear();
   }
 
-  void createNewTask() {
-    Navigator.of(context).push(MaterialPageRoute(
+  void createNewTask(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
         builder: (context) => EditScreen(
-              titleController: titleController,
-              contentController: contentController,
-              onSave: saveNewTask,
-              onCancel: () => Navigator.of(context).pop(),
-            )));
+          titleController: titleController,
+          contentController: contentController,
+          onSave: () => saveNewTask(context),
+          onCancel: () => Navigator.of(context).pop(),
+        ),
+      ),
+    );
   }
 
-  void deleteTask(int index){
-    setState(() {
-      todoList.removeAt(index);
-    });
-    print("hbugb");
+  void deleteTask(int? id) {
+    deleteItem(id!);
   }
 
   @override
   Widget build(BuildContext context) {
+    getAllDetails();
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: SafeArea(
@@ -76,7 +78,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.grey.shade300),
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        getAllDetails();
+                      },
                       padding: EdgeInsets.all(0),
                       icon: Icon(Icons.sort),
                     ),
@@ -95,27 +99,29 @@ class _HomeScreenState extends State<HomeScreen> {
                     focusedBorder: searchBorder),
               ),
               Expanded(
-                child: ListView.builder(
-                  padding: EdgeInsets.only(top: 30),
-                  itemCount: todoList.length,
-                  itemBuilder: (context, index) {
-                    return TodoTile(
-                      onChanged: (value) => checkBocChnage(value, index),
-                      taskCompleted: todoList[index][1],
-                      taskTitle: todoList[index][0],
-                      taskDescripction: "Task need to complete",
-                      taskDateAndTime: DateTime.now(),
-                      deleteFunction: () => deleteTask(index),
-                    );
-                  },
-                ),
+                child: ValueListenableBuilder(
+                    valueListenable: todoListNotifier,
+                    builder: (context, todolistitems, child) {
+                      return ListView.builder(
+                        padding: EdgeInsets.only(top: 30),
+                        itemCount: todolistitems.length,
+                        itemBuilder: (context, index) {
+                          return TodoTile(
+                            onChanged: (value) => checkBoxChange(todolistitems[index]),
+                            deleteFunction: () =>
+                                deleteTask(todolistitems[index].id),
+                            todomodelitsms: todolistitems[index],
+                          );
+                        },
+                      );
+                    }),
               ),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: createNewTask,
+        onPressed: () => createNewTask(context),
         child: Icon(
           Icons.add,
           size: 30,
