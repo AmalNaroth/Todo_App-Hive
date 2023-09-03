@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
@@ -16,9 +18,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    log("Reload");
     return Consumer<HomeScreenProvider>(
       builder: (context, homeProviderValue, child) {
-        WidgetsBinding.instance?.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           homeProviderValue.getValuesInDB();
         });
         return Scaffold(
@@ -61,19 +64,31 @@ class _HomeScreenState extends State<HomeScreen> {
                         focusedBorder: searchBorder),
                   ),
                   Expanded(
-                      child: ListView.builder(
+                      child:homeProviderValue.filteredNotesGet.isNotEmpty ? ListView.builder(
                     padding: EdgeInsets.only(top: 30),
-                    itemCount: homeProviderValue.tododblist.length,
+                    itemCount: homeProviderValue.filteredNotesGet.length,
                     itemBuilder: (context, index) {
                       return TodoTile(
                         onChanged: (value) => homeProviderValue.checkBoxChange(
-                            homeProviderValue.tododblist[index]),
+                            homeProviderValue.filteredNotesGet[index]),
                         deleteFunction: () => homeProviderValue.deleteTask(
-                            homeProviderValue.tododblist[index].id, context),
-                        todomodelitsms: homeProviderValue.tododblist[index],
+                            homeProviderValue.filteredNotesGet[index].id, context),
+                        todomodelitsms: homeProviderValue.filteredNotesGet[index],
                       );
                     },
-                  )),
+                  ): ListView.builder(
+                    padding: EdgeInsets.only(top: 30),
+                    itemCount: homeProviderValue.tododblistGet.length,
+                    itemBuilder: (context, index) {
+                      return TodoTile(
+                        onChanged: (value) => homeProviderValue.checkBoxChange(
+                            homeProviderValue.tododblistGet[index]),
+                        deleteFunction: () => homeProviderValue.deleteTask(
+                            homeProviderValue.tododblistGet[index].id, context),
+                        todomodelitsms: homeProviderValue.tododblistGet[index],
+                      );
+                    },
+                  ),),
                 ],
               ),
             ),

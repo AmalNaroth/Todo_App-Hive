@@ -13,6 +13,9 @@ class HomeScreenProvider extends ChangeNotifier {
 
   List<TodoModel> filteredNotes=[];
 
+  List<TodoModel> get filteredNotesGet=>filteredNotes;
+  List<TodoModel> get tododblistGet =>tododblist;
+
   Future<void> getValuesInDB() async {
     try {
       tododblist = await getAllDetails();
@@ -75,13 +78,14 @@ class HomeScreenProvider extends ChangeNotifier {
   }
 
   void searchFunction(String searchKey) {
-    filteredNotes.clear();
-    filteredNotes = tododblist
-        .where((element) =>
-            element.taskTitle.toLowerCase().contains(searchKey.toLowerCase()) ||
-            element.taskDescipction
-                .toLowerCase()
-                .contains(searchKey.toLowerCase()))
-        .toList();
-  }
+  filteredNotes = tododblist
+      .where((element) =>
+          element.taskTitle.toLowerCase().contains(searchKey.toLowerCase()) ||
+          element.taskDescipction
+              .toLowerCase()
+              .contains(searchKey.toLowerCase()))
+      .toList();
+  notifyListeners();
+}
+
 }
