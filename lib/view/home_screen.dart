@@ -8,12 +8,19 @@ import 'package:todo_hive/utils/constant.dart';
 import 'package:todo_hive/view/editing_screen.dart';
 import 'package:todo_hive/view/todo_tile.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController titleController = TextEditingController();
 
   final TextEditingController contentController = TextEditingController();
+
+  List<TodoModel> filteredNotes = [];
 
   void checkBoxChange(TodoModel value) {
     value.checkBox = !value.checkBox;
@@ -56,6 +63,19 @@ class HomeScreen extends StatelessWidget {
     deleteItem(id!);
   }
 
+  void searchFunction(String searchKey) {
+    filteredNotes.clear();
+    setState(() {
+      filteredNotes = todoListNotifier.value
+        .where((element) =>
+            element.taskTitle.toLowerCase().contains(searchKey.toLowerCase()) ||
+            element.taskDescipction
+                .toLowerCase()
+                .contains(searchKey.toLowerCase()))
+        .toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     getAllDetails();
@@ -89,6 +109,7 @@ class HomeScreen extends StatelessWidget {
               ),
               Gap(20),
               TextField(
+                onChanged: (value) => searchFunction(value),
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(vertical: 12),
                     hintText: "Search ToDo",
@@ -99,22 +120,30 @@ class HomeScreen extends StatelessWidget {
                     focusedBorder: searchBorder),
               ),
               Expanded(
-                child: ValueListenableBuilder(
-                    valueListenable: todoListNotifier,
-                    builder: (context, todolistitems, child) {
-                      return ListView.builder(
-                        padding: EdgeInsets.only(top: 30),
-                        itemCount: todolistitems.length,
-                        itemBuilder: (context, index) {
-                          return TodoTile(
-                            onChanged: (value) => checkBoxChange(todolistitems[index]),
-                            deleteFunction: () =>
-                                deleteTask(todolistitems[index].id),
-                            todomodelitsms: todolistitems[index],
+                child: filteredNotes.isNotEmpty
+                    ? ListView.builder(
+                      itemCount: filteredNotes.length,
+                        itemBuilder: (context, index) => ListTile(
+                          title: Text(filteredNotes[index].taskTitle),
+                        ),
+                      )
+                    : ValueListenableBuilder(
+                        valueListenable: todoListNotifier,
+                        builder: (context, todolistitems, child) {
+                          return ListView.builder(
+                            padding: EdgeInsets.only(top: 30),
+                            itemCount: todolistitems.length,
+                            itemBuilder: (context, index) {
+                              return TodoTile(
+                                onChanged: (value) =>
+                                    checkBoxChange(todolistitems[index]),
+                                deleteFunction: () =>
+                                    deleteTask(todolistitems[index].id),
+                                todomodelitsms: todolistitems[index],
+                              );
+                            },
                           );
-                        },
-                      );
-                    }),
+                        }),
               ),
             ],
           ),

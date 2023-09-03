@@ -23,7 +23,7 @@ void addToDataBase(TodoModel value) async {
   }
 }
 
-void getAllDetails() async {
+ Future<void> getAllDetails() async {
   try {
     final _tododb = await Hive.openBox<TodoModel>('todobox_db');
     todoListNotifier.value.clear();
