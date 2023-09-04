@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_hive/components/custom_showdialogebox.dart';
+import 'package:todo_hive/components/custom_snackbar.dart';
 import 'package:todo_hive/models/todo_model.dart';
 import 'package:todo_hive/repo/database.dart';
 import 'package:todo_hive/view/editing_screen.dart';
@@ -11,10 +12,10 @@ class HomeScreenProvider extends ChangeNotifier {
 
   final TextEditingController contentController = TextEditingController();
 
-  List<TodoModel> filteredNotes=[];
+  List<TodoModel> filteredNotes = [];
 
-  List<TodoModel> get filteredNotesGet=>filteredNotes;
-  List<TodoModel> get tododblistGet =>tododblist;
+  List<TodoModel> get filteredNotesGet => filteredNotes;
+  List<TodoModel> get tododblistGet => tododblist;
 
   Future<void> getValuesInDB() async {
     try {
@@ -54,19 +55,23 @@ class HomeScreenProvider extends ChangeNotifier {
   }
 
   void saveNewTask(BuildContext context) {
-    String formattedDate = DateFormat.yMMMd().format(DateTime.now());
-    final todomodelvalue = TodoModel(
-        taskTitle: titleController.text,
-        taskDescipction: contentController.text,
-        taskTime: formattedDate,
-        checkBox: false);
-    addToDataBase(todomodelvalue);
-    print("created");
-    Navigator.of(context).pop();
-    titleController.clear();
-    contentController.clear();
-    getValuesInDB();
-    notifyListeners();
+    if (titleController.text.isNotEmpty && contentController.text.isNotEmpty) {
+      String formattedDate = DateFormat.yMMMd().format(DateTime.now());
+      final todomodelvalue = TodoModel(
+          taskTitle: titleController.text,
+          taskDescipction: contentController.text,
+          taskTime: formattedDate,
+          checkBox: false);
+      addToDataBase(todomodelvalue, context);
+      print("created");
+      Navigator.of(context).pop();
+      titleController.clear();
+      contentController.clear();
+      getValuesInDB();
+      notifyListeners();
+    } else {
+      customSnackBar("Please provide all the required details", context);
+    }
   }
 
   void deleteTask(int? id, BuildContext context) {
@@ -78,14 +83,13 @@ class HomeScreenProvider extends ChangeNotifier {
   }
 
   void searchFunction(String searchKey) {
-  filteredNotes = tododblist
-      .where((element) =>
-          element.taskTitle.toLowerCase().contains(searchKey.toLowerCase()) ||
-          element.taskDescipction
-              .toLowerCase()
-              .contains(searchKey.toLowerCase()))
-      .toList();
-  notifyListeners();
-}
-
+    filteredNotes = tododblist
+        .where((element) =>
+            element.taskTitle.toLowerCase().contains(searchKey.toLowerCase()) ||
+            element.taskDescipction
+                .toLowerCase()
+                .contains(searchKey.toLowerCase()))
+        .toList();
+    notifyListeners();
+  }
 }

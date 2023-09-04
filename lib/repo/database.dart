@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:todo_hive/components/custom_snackbar.dart';
 import 'package:todo_hive/models/todo_model.dart';
 
-void addToDataBase(TodoModel value) async {
+void addToDataBase(TodoModel value,BuildContext context) async {
   try {
     final _tododb = await Hive.openBox<TodoModel>('todobox_db');
     final _id = await _tododb.add(value);
@@ -14,6 +16,7 @@ void addToDataBase(TodoModel value) async {
     );
     await _tododb.put(_id, newValue);
     await getAllDetails();
+    customSnackBar("New task created", context);
     print("Added to database");
   } catch (e) {
     print("Error adding to database: $e");
