@@ -17,7 +17,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    log("Reload");
+    //log("Reload");
+    final screenHight =  MediaQuery.of(context).size.height;
+    final screenWidth =  MediaQuery.of(context).size.width;
     return Consumer<HomeScreenProvider>(
       builder: (context, homeProviderValue, child) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -36,8 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       CustomTextWidget("MY TODO",
                           fontSize: 25, fontWeight: FontWeight.bold),
                       Container(
-                        width: 40,
-                        height: 40,
+                        width: screenWidth*.25/2,
+                        height: screenWidth*.25/2,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.grey.shade300),
@@ -54,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onChanged: (value) =>
                         homeProviderValue.searchFunction(value),
                     decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(vertical: 12),
+                        contentPadding: EdgeInsets.symmetric(vertical: screenWidth*.1/2),
                         hintText: "Search ToDo",
                         prefixIcon: Icon(Icons.search),
                         fillColor: Colors.grey.shade300,
@@ -96,7 +98,8 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () => homeProviderValue.createNewTask(context),
             child: Icon(
               Icons.add,
-              size: 30,
+              color: Colors.white,
+              size: screenWidth*.15/2,
             ),
           ),
         );

@@ -8,11 +8,11 @@ final searchBorder=OutlineInputBorder(
                 );
 
 
-const List<Color> colosList=[
-Colors.red,
-Colors.blue,
-Colors.purple,
-Colors.amber,
-Colors.green,
-Colors.cyanAccent
+ List<Color> colosList=[
+Colors.red.shade100,
+Colors.blue.shade100,
+Colors.purple.shade100,
+Colors.amber.shade100,
+Colors.green.shade100,
+Colors.cyanAccent.shade100
 ];
