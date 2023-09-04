@@ -6,6 +6,9 @@ final searchBorder=OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide.none
                 );
+  final scaffoldBg= Colors.grey.shade200;
+
+  const whiteColor=Colors.white;
 
 
  List<Color> colosList=[

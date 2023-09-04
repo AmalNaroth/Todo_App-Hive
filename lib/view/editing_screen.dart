@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_hive/utils/constant.dart';
 
 class EditScreen extends StatelessWidget {
   TextEditingController? titleController;
@@ -16,7 +17,7 @@ class EditScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth =  MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: scaffoldBg,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16, 40, 16, 0),
         child: Column(children: [
@@ -34,7 +35,7 @@ class EditScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10)),
                     child: const Icon(
                       Icons.arrow_back_ios_new,
-                      color: Colors.white,
+                      color: whiteColor,
                     ),
                   ))
             ],
@@ -74,7 +75,7 @@ class EditScreen extends StatelessWidget {
         onPressed: onSave,
         elevation: screenWidth*15/2,
         backgroundColor: Colors.grey.shade800,
-        child: const Icon(Icons.done_all_outlined,color: Colors.white,),
+        child: const Icon(Icons.done_all_outlined,color: whiteColor,),
       ),
     );
   }

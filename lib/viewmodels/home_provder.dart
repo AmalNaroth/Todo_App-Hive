@@ -17,6 +17,7 @@ class HomeScreenProvider extends ChangeNotifier {
   List<TodoModel> get filteredNotesGet => filteredNotes;
   List<TodoModel> get tododblistGet => tododblist;
 
+  //getting values from database
   Future<void> getValuesInDB() async {
     try {
       tododblist = await getAllDetails();
@@ -26,7 +27,7 @@ class HomeScreenProvider extends ChangeNotifier {
     }
   }
 
-  //crate screen
+  //new task creation fun
 
   void createNewTask(BuildContext context) {
     Navigator.of(context).push(
@@ -41,6 +42,8 @@ class HomeScreenProvider extends ChangeNotifier {
     );
   }
 
+  //checkbox upate fun
+
   void checkBoxChange(TodoModel value) {
     value.checkBox = !value.checkBox;
     final updateValue = TodoModel(
@@ -53,6 +56,8 @@ class HomeScreenProvider extends ChangeNotifier {
     getValuesInDB();
     notifyListeners();
   }
+
+  //new task adding to database
 
   void saveNewTask(BuildContext context) {
     if (titleController.text.isNotEmpty && contentController.text.isNotEmpty) {
@@ -74,6 +79,8 @@ class HomeScreenProvider extends ChangeNotifier {
     }
   }
 
+  //deletetask function
+
   void deleteTask(int? id, BuildContext context) {
     confirmDialog(context, () {
       deleteItem(id!);
@@ -81,6 +88,8 @@ class HomeScreenProvider extends ChangeNotifier {
       notifyListeners();
     });
   }
+
+  //search function
 
   void searchFunction(String searchKey) {
     filteredNotes = tododblist

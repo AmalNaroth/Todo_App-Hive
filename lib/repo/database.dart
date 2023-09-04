@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todo_hive/components/custom_snackbar.dart';
 import 'package:todo_hive/models/todo_model.dart';
 
+//adding values in database
 void addToDataBase(TodoModel value,BuildContext context) async {
   try {
     final _tododb = await Hive.openBox<TodoModel>('todobox_db');
@@ -23,6 +24,7 @@ void addToDataBase(TodoModel value,BuildContext context) async {
   }
 }
 
+//get values from database
 Future<List<TodoModel>> getAllDetails() async {
   try {
     final _tododb = await Hive.openBox<TodoModel>('todobox_db');
@@ -34,6 +36,7 @@ Future<List<TodoModel>> getAllDetails() async {
   }
 }
 
+//dalete item function
 Future<void> deleteItem(int id) async {
   final _tododb = await Hive.openBox<TodoModel>("todobox_db");
   try {
@@ -46,6 +49,7 @@ Future<void> deleteItem(int id) async {
   }
 }
 
+//checkbox update function
 Future<void> checkboxUpdate(TodoModel value) async {
   try {
     final _tododb = await Hive.openBox<TodoModel>("todobox_db");
